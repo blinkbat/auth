@@ -56,6 +56,23 @@ userSchema.pre( 'save', function( next ) {
 
 });
 
+
+
+userSchema.methods.comparePassword = function( candidatePw, callback ) {
+
+    // compare candidate hashed pw with stored hashed pw
+    bcrypt.compare( candidatePw, this.password, ( err, isMatch ) => { 
+
+        if( err ) return callback( err );
+
+        callback( null, isMatch );
+
+    });
+
+};
+
+
+
 // create Model class
 const ModelClass = mongoose.model( 'user', userSchema );
 

@@ -1,7 +1,40 @@
 
 
 
+// import json web token
+const jwt = require( 'jwt-simple' );
+
+// import User model
 const User = require( '../models/user' );
+
+// import config obj
+const config = require( '../config' );
+
+
+
+// function to create token
+function tokenForUser( user ) {
+
+    // as convention, JWTs have a sub prop ('subject')
+    // and iat ('issued at time')
+
+    const timestamp = new Date().getTime();
+
+    return jwt.encode( 
+
+        { 
+            sub: user.id,
+            iat: timestamp 
+        }, 
+
+        // encode with our secret string
+        config.secret 
+
+    );
+
+}
+
+
 
 exports.signUp = ( req, res, next ) => {
 
@@ -40,11 +73,20 @@ exports.signUp = ( req, res, next ) => {
             if( err ) { return next( err ); }
 
             // send success response
-            res.json({ success: true });
+            res.json({ token: tokenForUser( user ) });
         });
 
     });
     
 }
+
+
+
+exports.signIn = ( req, res, next ) => {
+
+    // user has signed in, give them a token
+    res.send({ token: tokenForUser( req.user ) });
+
+};
 
 
