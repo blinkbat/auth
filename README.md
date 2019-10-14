@@ -1,6 +1,6 @@
 
 
 # auth
-* auth boiler w/ react, express, etc
+* auth validation w/ node.js, express, passport.js, jwt, etc
 
 
